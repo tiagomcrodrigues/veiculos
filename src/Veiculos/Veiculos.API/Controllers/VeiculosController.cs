@@ -116,7 +116,11 @@ namespace Veiculos.API.Controllers
         {
 
             if (request is null)
+<<<<<<< HEAD
                 return BadRequest("Corpo da requisição inválida ou não informada");
+=======
+                return BadRequest("Corpo da requisição inválida");
+>>>>>>> 0c73b0bf44bd328c0ac3c314439c66eaf8edb60c
 
             ///jeito avancado de buscar ID
             var veiculo = _dbContext.Veiculos.FirstOrDefault(veiculo => veiculo.Id == id);
