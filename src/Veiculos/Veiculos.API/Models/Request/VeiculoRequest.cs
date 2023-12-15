@@ -5,7 +5,7 @@ namespace Veiculos.API.Models.Request
     public class VeiculoRequest
     {
         [Required(ErrorMessage ="Campo Ano modelo é obrigatório")]
-        [Range(1900,2025,ErrorMessage ="Este ano e invalido")]
+        [Range(1000,2025,ErrorMessage ="Este ano e invalido")]
         public short? AnoModelo { get; set; }
 
         [Range(1900, 2025, ErrorMessage = "Este ano e invalido")]

@@ -22,7 +22,7 @@ namespace Veiculos.API.Controllers
 
             var veiculo = _dbContext.Veiculos.Where(veiculo => veiculo.Id == id).FirstOrDefault();
 
-            if (veiculo == null)
+            if (veiculo is null)
                 return NotFound("Registro não encontrado");
 
             var result = veiculo.Map();
@@ -83,7 +83,7 @@ namespace Veiculos.API.Controllers
         {
             ///jeito avancado de buscar ID
             var veiculo = _dbContext.Veiculos.FirstOrDefault(veiculo => veiculo.Id == id);
-            if (veiculo == null)
+            if (veiculo is null)
                 return NotFound("registro não encontrado");
 
             if (!ModelState.IsValid)
@@ -111,6 +111,45 @@ namespace Veiculos.API.Controllers
 
         }
 
+        [HttpPatch("{id:guid}")]
+        public IActionResult EditarParcial([FromRoute] Guid id, [FromBody] VeiculoPatchRequest request)
+        {
+
+            if (request is null)
+                return BadRequest("Corpo da requisição inválida");
+
+            ///jeito avancado de buscar ID
+            var veiculo = _dbContext.Veiculos.FirstOrDefault(veiculo => veiculo.Id == id);
+            if (veiculo is null)
+                return NotFound("registro não encontrado");
+
+            // Tem valor e é diferente do que está gravado
+            if (request.AnoModelo.HasValue && request.AnoModelo != veiculo.AnoModelo)
+                veiculo.AnoModelo = request.AnoModelo.Value;
+
+            if (request.AnoFabricacao.HasValue && request.AnoFabricacao != veiculo.AnoFabricacao) { 
+                 veiculo.AnoFabricacao = request.AnoFabricacao.Value; }
+
+            if (request.Modelo is not null && request.Modelo != veiculo.Modelo)  
+             veiculo.Modelo = request.Modelo; 
+
+            if (request.Fabricante is not null && request.Fabricante != veiculo.Fabricante) 
+             veiculo.Fabricante = request.Fabricante; 
+
+            if (request.Cor is not null && request.Cor != veiculo.Cor)
+            veiculo.Cor = request.Cor;
+
+            if (request.Placa is not null && request.Placa != veiculo.Placa)
+             veiculo.Placa = request.Placa; 
+
+            if (request.Tipo is not null && request.Tipo != veiculo.Tipo) 
+             veiculo.Tipo = request.Tipo;
+
+            return NoContent();
+
+
+        }
+
 
 
 
@@ -122,7 +161,7 @@ namespace Veiculos.API.Controllers
         {
             ///jeito basico de buscar ID
             var veiculo = _dbContext.Veiculos.Where(veiculo => veiculo.Id == id ).FirstOrDefault();
-            if (veiculo == null)
+            if (veiculo is null)
                 return NotFound("registro não encotrado");
 
             _dbContext.Veiculos.Remove(veiculo);
