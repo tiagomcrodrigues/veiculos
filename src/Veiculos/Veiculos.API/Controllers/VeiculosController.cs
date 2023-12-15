@@ -43,7 +43,11 @@ namespace Veiculos.API.Controllers
             }
             else
             {
-                result = _dbContext.Veiculos.Where(veiculo => veiculo.Fabricante == fabricante).Select(s => s.Map());
+                /// para buscar outros tipos de campos
+                result = _dbContext.Veiculos.Where(veiculo => 
+                    veiculo.Fabricante
+                        .Equals(fabricante,StringComparison.OrdinalIgnoreCase))
+                        .Select(s => s.Map());
             }
 
             return Ok(result);
@@ -70,13 +74,53 @@ namespace Veiculos.API.Controllers
             var veiculo = request.Map();
             _dbContext.Veiculos.Add(veiculo);
 
-            return Created(uri: veiculo.Id.ToString(), null);
+            return Created(uri: string.Empty, new {id=veiculo.Id.ToString()});
 
         }
+
+        [HttpPut("{id:guid}")]
+        public IActionResult Editar([FromRoute]Guid id,[FromBody]VeiculoRequest request)
+        {
+            ///jeito avancado de buscar ID
+            var veiculo = _dbContext.Veiculos.FirstOrDefault(veiculo => veiculo.Id == id);
+            if (veiculo == null)
+                return NotFound("registro não encontrado");
+
+            if (!ModelState.IsValid)
+            {
+                var criticas = ModelState
+                     .Select(s => new
+                     {
+                         Chave = s.Key,
+                         Valor = string.Join(',', s.Value
+                         .Errors
+                         .Select(s => s.ErrorMessage))
+                     });
+                return BadRequest();
+            }
+            veiculo.AnoModelo = request.AnoModelo.Value;
+            veiculo.AnoFabricacao = request.AnoFabricacao.Value;
+            veiculo.Modelo = request.Modelo;
+            veiculo.Fabricante = request.Fabricante;
+            veiculo.Cor = request.Cor;
+            veiculo.Placa = request.Placa;
+            veiculo.Tipo = request.Tipo;
+
+            return NoContent();
+
+
+        }
+
+
+
+
+
+
 
         [HttpDelete("{id:guid}")]
         public IActionResult Excluir([FromRoute]Guid id)
         {
+            ///jeito basico de buscar ID
             var veiculo = _dbContext.Veiculos.Where(veiculo => veiculo.Id == id ).FirstOrDefault();
             if (veiculo == null)
                 return NotFound("registro não encotrado");
