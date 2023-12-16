@@ -10,9 +10,8 @@ namespace Veiculos.API.Extensions
         public static Veiculo Map(this VeiculoRequest request)
         {
 
-            Veiculo veiculo = new Veiculo()
+            Veiculo veiculo = new()
             {
-                Id = Guid.NewGuid(),
                 AnoModelo = request.AnoModelo.Value,
                 AnoFabricacao = request.AnoFabricacao.Value,
                 Modelo = request.Modelo,

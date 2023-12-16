@@ -13,7 +13,12 @@ namespace Veiculos.API.Controllers
     public class VeiculosController : ControllerBase
     {
 
-        private readonly DbContext _dbContext = new();
+        private readonly DbVeiculos _dbContext;
+
+        public VeiculosController(DbVeiculos ctx)
+        {
+            _dbContext = ctx;
+        }
 
 
         [HttpGet("{id:guid}")]
@@ -45,8 +50,7 @@ namespace Veiculos.API.Controllers
             {
                 /// para buscar outros tipos de campos
                 result = _dbContext.Veiculos.Where(veiculo => 
-                    veiculo.Fabricante
-                        .Equals(fabricante,StringComparison.OrdinalIgnoreCase))
+                    veiculo.Fabricante == fabricante)
                         .Select(s => s.Map());
             }
 
@@ -73,6 +77,7 @@ namespace Veiculos.API.Controllers
             // Mapear request para Entidade de Bancos
             var veiculo = request.Map();
             _dbContext.Veiculos.Add(veiculo);
+            _dbContext.SaveChanges();
 
             return Created(uri: string.Empty, new {id=veiculo.Id.ToString()});
 
@@ -105,6 +110,8 @@ namespace Veiculos.API.Controllers
             veiculo.Cor = request.Cor;
             veiculo.Placa = request.Placa;
             veiculo.Tipo = request.Tipo;
+
+            _dbContext.SaveChanges();
 
             return NoContent();
 
@@ -145,16 +152,12 @@ namespace Veiculos.API.Controllers
             if (request.Tipo is not null && request.Tipo != veiculo.Tipo) 
              veiculo.Tipo = request.Tipo;
 
+            _dbContext.SaveChanges();
+
             return NoContent();
 
 
         }
-
-
-
-
-
-
 
         [HttpDelete("{id:guid}")]
         public IActionResult Excluir([FromRoute]Guid id)
@@ -165,6 +168,7 @@ namespace Veiculos.API.Controllers
                 return NotFound("registro não encotrado");
 
             _dbContext.Veiculos.Remove(veiculo);
+            _dbContext.SaveChanges();
 
             return NoContent();
         }
