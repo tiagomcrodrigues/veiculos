@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Veiculos.API.Data.Entities;
 
 namespace Veiculos.API.Data.Configurations
 {
@@ -27,10 +28,9 @@ namespace Veiculos.API.Data.Configurations
                 .HasMaxLength(50)
                 .IsUnicode(false);
 
-            b.Property(c => c.Fabricante)
-                .HasColumnName(nameof(Veiculo.Fabricante))
-                 .HasMaxLength(50)
-                 .IsUnicode(false);
+            b.Property(c => c.FabricanteId)
+                .HasColumnName(nameof(Veiculo.FabricanteId));
+                 
 
             b.Property(c => c.Cor)
                .HasColumnName(nameof(Veiculo.Cor))
@@ -47,6 +47,11 @@ namespace Veiculos.API.Data.Configurations
                .HasColumnName(nameof(Veiculo.Tipo))
                 .HasMaxLength(20)
                 .IsUnicode(false);
+
+            b.HasOne(o => o.Fabricante)
+                .WithMany(d => d.Veiculos)
+                .HasForeignKey(fk => fk.FabricanteId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
         }

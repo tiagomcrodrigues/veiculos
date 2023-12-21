@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Veiculos.API.Data;
 
@@ -11,9 +12,10 @@ using Veiculos.API.Data;
 namespace Veiculos.API.Migrations
 {
     [DbContext(typeof(DbVeiculos))]
-    partial class DbVeiculosModelSnapshot : ModelSnapshot
+    [Migration("20231215232932_CriacaoDb")]
+    partial class CriacaoDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +24,7 @@ namespace Veiculos.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Veiculos.API.Data.Entities.Veiculo", b =>
+            modelBuilder.Entity("Veiculos.API.Data.Veiculo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,9 +44,11 @@ namespace Veiculos.API.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("Cor");
 
-                    b.Property<Guid>("FabricanteId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("FabricanteId");
+                    b.Property<string>("Fabricante")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Fabricante");
 
                     b.Property<string>("Modelo")
                         .IsRequired()
@@ -67,47 +71,7 @@ namespace Veiculos.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FabricanteId");
-
                     b.ToTable("veiculo", (string)null);
-                });
-
-            modelBuilder.Entity("Veiculos.API.Data.Fabricante", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("Nome");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Nome")
-                        .IsUnique()
-                        .HasDatabaseName("UK_Fabricante_Nome");
-
-                    b.ToTable("fabricante", (string)null);
-                });
-
-            modelBuilder.Entity("Veiculos.API.Data.Entities.Veiculo", b =>
-                {
-                    b.HasOne("Veiculos.API.Data.Fabricante", "Fabricante")
-                        .WithMany("Veiculos")
-                        .HasForeignKey("FabricanteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Fabricante");
-                });
-
-            modelBuilder.Entity("Veiculos.API.Data.Fabricante", b =>
-                {
-                    b.Navigation("Veiculos");
                 });
 #pragma warning restore 612, 618
         }

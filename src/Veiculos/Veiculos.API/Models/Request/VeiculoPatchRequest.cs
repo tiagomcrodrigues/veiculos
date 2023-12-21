@@ -8,7 +8,7 @@
 
         public string? Modelo { get; set; }
         
-        public string? Fabricante { get; set; }
+        public Guid? FabricanteId { get; set; }
         
         public string? Cor { get; set; }
         

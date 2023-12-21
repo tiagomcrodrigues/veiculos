@@ -1,4 +1,4 @@
-﻿using Veiculos.API.Data;
+﻿using Veiculos.API.Data.Entities;
 using Veiculos.API.Models.Request;
 using Veiculos.API.Models.Response;
 
@@ -12,10 +12,10 @@ namespace Veiculos.API.Extensions
 
             Veiculo veiculo = new()
             {
-                AnoModelo = request.AnoModelo.Value,
-                AnoFabricacao = request.AnoFabricacao.Value,
-                Modelo = request.Modelo,
-                Fabricante = request.Fabricante,
+                AnoModelo = request.AnoModelo ?? default,
+                AnoFabricacao = request.AnoFabricacao ?? default,
+                Modelo = request.Modelo ?? string.Empty,
+                FabricanteId = request.FabricanteId.Value,
                 Cor = request.Cor,
                 Placa = request.Placa,
                 Tipo = request.Tipo
@@ -34,7 +34,11 @@ namespace Veiculos.API.Extensions
                 AnoModelo = veiculo.AnoModelo,
                 AnoFabricacao = veiculo.AnoFabricacao,
                 Modelo = veiculo.Modelo,
-                Fabricante = veiculo.Fabricante,
+                Fabricante = new()
+                {
+                    Id = veiculo.FabricanteId,
+                    Nome = veiculo.Fabricante.Nome
+                },
                 Cor = veiculo.Cor,
                 Placa = veiculo.Placa,
                 Tipo = veiculo.Tipo
@@ -43,6 +47,7 @@ namespace Veiculos.API.Extensions
             return resp;
 
         }
+
 
     }
 }

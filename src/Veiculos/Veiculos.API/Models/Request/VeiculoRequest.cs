@@ -13,15 +13,17 @@ namespace Veiculos.API.Models.Request
         public short? AnoFabricacao { get; set; }
 
         [Required(ErrorMessage = "Campo modelo é obrigatório")]
+        [StringLength(50, ErrorMessage = "O campo deve conter no máximo 50 caracteres")]
         public string? Modelo { get; set; }
         
         [Required(ErrorMessage = "Campo fabricante é obrigatório")]
-        public string? Fabricante { get; set; }
+        public Guid? FabricanteId { get; set; }
         
+        [StringLength(50, ErrorMessage = "O campo deve conter no máximo 50 caracteres")]
         public string? Cor { get; set; }
-        
+        [StringLength(7, ErrorMessage = "O campo deve conter no máximo 50 caracteres")]
         public string? Placa { get; set; }
-        
+        [StringLength(50, ErrorMessage = "O campo deve conter no máximo 50 caracteres")]
         public string? Tipo { get; set; }
 
     }

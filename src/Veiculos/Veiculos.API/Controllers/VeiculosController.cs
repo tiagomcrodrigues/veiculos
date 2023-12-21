@@ -44,13 +44,13 @@ namespace Veiculos.API.Controllers
 
             if (string.IsNullOrWhiteSpace(fabricante))
             {
-                result = _dbContext.Veiculos.Select(veiculo => veiculo.Map());
+                result = _dbContext.Veiculos.ToList().Select(veiculo => veiculo.Map());
             }
             else
             {
                 /// para buscar outros tipos de campos
                 result = _dbContext.Veiculos.Where(veiculo => 
-                    veiculo.Fabricante == fabricante)
+                    veiculo.Fabricante.Nome == fabricante)
                         .Select(s => s.Map());
             }
 
@@ -62,17 +62,13 @@ namespace Veiculos.API.Controllers
         {
 
             if (!ModelState.IsValid)
-            {
-                var criticas = ModelState
-                    .Select(s => new 
-                    { 
-                        Chave = s.Key, 
-                        Valor = string.Join(',', s.Value
-                        .Errors
-                        .Select(s => s.ErrorMessage))
-                    });
-                return BadRequest(criticas);
-            }
+                return BadRequest(ModelState.CapturaCriticas());
+            //TODO:validar entrada chave estranjeira 
+
+            var fabricante = _dbContext.Fabricantes.Where(fabricante => fabricante.Id == request.FabricanteId).FirstOrDefault();
+
+            if (fabricante is null)
+                return NotFound("Fabricante não encontrado");
 
             // Mapear request para Entidade de Bancos
             var veiculo = request.Map();
@@ -92,21 +88,13 @@ namespace Veiculos.API.Controllers
                 return NotFound("registro não encontrado");
 
             if (!ModelState.IsValid)
-            {
-                var criticas = ModelState
-                     .Select(s => new
-                     {
-                         Chave = s.Key,
-                         Valor = string.Join(',', s.Value
-                         .Errors
-                         .Select(s => s.ErrorMessage))
-                     });
-                return BadRequest();
-            }
+                return BadRequest(ModelState.CapturaCriticas());
+
+
             veiculo.AnoModelo = request.AnoModelo.Value;
             veiculo.AnoFabricacao = request.AnoFabricacao.Value;
             veiculo.Modelo = request.Modelo;
-            veiculo.Fabricante = request.Fabricante;
+            veiculo.FabricanteId = request.FabricanteId.Value;
             veiculo.Cor = request.Cor;
             veiculo.Placa = request.Placa;
             veiculo.Tipo = request.Tipo;
@@ -140,8 +128,8 @@ namespace Veiculos.API.Controllers
             if (request.Modelo is not null && request.Modelo != veiculo.Modelo)  
              veiculo.Modelo = request.Modelo; 
 
-            if (request.Fabricante is not null && request.Fabricante != veiculo.Fabricante) 
-             veiculo.Fabricante = request.Fabricante; 
+            if (request.FabricanteId is not null && request.FabricanteId != veiculo.FabricanteId) 
+             veiculo.FabricanteId = request.FabricanteId.Value; 
 
             if (request.Cor is not null && request.Cor != veiculo.Cor)
             veiculo.Cor = request.Cor;

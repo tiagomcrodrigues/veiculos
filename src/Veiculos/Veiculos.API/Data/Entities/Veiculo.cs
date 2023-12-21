@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Veiculos.API.Data
+namespace Veiculos.API.Data.Entities
 {
     public class Veiculo
     {
@@ -23,13 +23,15 @@ namespace Veiculos.API.Data
 
         public string Modelo { get; set; }
 
-        public string? Fabricante { get; set; }
-
+        public Guid FabricanteId { get; set; }
+        
         public string? Cor { get; set; }
 
         public string? Placa { get; set; }
 
         public string? Tipo { get; set; }
+
+        public virtual Fabricante Fabricante { get; set; }
 
     }
 }

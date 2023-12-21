@@ -12,8 +12,8 @@ using Veiculos.API.Data;
 namespace Veiculos.API.Migrations
 {
     [DbContext(typeof(DbVeiculos))]
-    [Migration("20231215232932_Criacao Db")]
-    partial class CriacaoDb
+    [Migration("20231216163002_IndiceUnicoFabricanteNome")]
+    partial class IndiceUnicoFabricanteNome
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace Veiculos.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Veiculos.API.Data.Veiculo", b =>
+            modelBuilder.Entity("Veiculos.API.Data.Entities.Veiculo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -72,6 +72,28 @@ namespace Veiculos.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("veiculo", (string)null);
+                });
+
+            modelBuilder.Entity("Veiculos.API.Data.Fabricante", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Nome");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Nome")
+                        .IsUnique()
+                        .HasDatabaseName("UK_Fabricante_Nome");
+
+                    b.ToTable("fabricante", (string)null);
                 });
 #pragma warning restore 612, 618
         }
