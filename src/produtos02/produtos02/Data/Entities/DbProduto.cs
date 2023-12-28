@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using produtos02.Data.Configurations;
 
-namespace produtos02.Extensions
+namespace produtos02.Data.Entities
 {
     public class DbProduto : DbContext
     {
@@ -13,26 +14,14 @@ namespace produtos02.Extensions
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new produto)
+            modelBuilder.ApplyConfiguration(new ProdutoConfigurations());
+            modelBuilder.ApplyConfiguration(new CategoriaConfigurations());
         }
 
+        public DbSet<Produto> produtos { get; set; }
+
+        public DbSet<Categoria> categorias { get; set; }
 
 
-
-
-        public DbSet<>;
-
-
-
-
-
-
-
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.ApplyConfiguration(new VeiculoConfiguration());
-        //    modelBuilder.ApplyConfiguration(new FabricanteConfiguration());
-        //}
     }
 }

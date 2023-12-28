@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Veiculos.API.Data;
+using Veiculos.API.Data.Entities;
 
 namespace Veiculos
 {

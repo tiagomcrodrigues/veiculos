@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
 using System.Diagnostics.Metrics;
-using Veiculos.API.Data;
+using Veiculos.API.Data.Entities;
 using Veiculos.API.Extensions;
 using Veiculos.API.Models.Request;
 using Veiculos.API.Models.Response;

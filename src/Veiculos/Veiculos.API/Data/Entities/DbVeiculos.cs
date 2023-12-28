@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Veiculos.API.Data.Configurations;
-using Veiculos.API.Data.Entities;
 
-namespace Veiculos.API.Data
+namespace Veiculos.API.Data.Entities
 {
     public class DbVeiculos : DbContext
     {
