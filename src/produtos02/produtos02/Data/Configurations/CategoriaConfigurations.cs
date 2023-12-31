@@ -16,9 +16,10 @@ namespace produtos02.Data.Configurations
 
             b.Property(b => b.Descricao)
                 .HasColumnName(nameof(Categoria.Descricao))
-                .HasMaxLength(90)
-                .IsUnicode(false);
-          
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .IsRequired();
+
             b.Property(b => b.Ativo)
                 .HasColumnName(nameof(Categoria.Ativo))
                 .HasColumnType("bit")
@@ -26,6 +27,9 @@ namespace produtos02.Data.Configurations
                 .IsRequired();
 
 
+            b.HasIndex(categoria => categoria.Descricao)
+                .HasDatabaseName($"UK_{nameof(Categoria)}_{nameof(Categoria.Descricao)}")
+                .IsUnique();
 
 
         }

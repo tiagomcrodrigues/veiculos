@@ -1,4 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using produtos02.Data.Entities;
+using produtos02.Extensions;
+using produtos02.Models.Request;
+using produtos02.Models.Responce;
+using produtos02.Models.Response;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +14,79 @@ namespace produtos02.Controllers
     [ApiController]
     public class CategoriaController : ControllerBase
     {
-        // GET: api/<CategoriaController>
+        private readonly DbProduto _DbProduto;
+
+        //TODO : tratar erro quando colocar  mesma descrição categoria 
+
+        public CategoriaController(DbProduto ctx)
+        {
+            _DbProduto = ctx;
+        }
+
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Listar()
         {
-            return new string[] { "value1", "value2" };
+            IEnumerable<CategoriaResponse> result = _DbProduto.Categorias
+                .Select(categoria => categoria.Map());
+            return Ok(result);
         }
 
-        // GET api/<CategoriaController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id:guid}")]
+        public IActionResult ListarID([FromRoute]Guid id)
         {
-            return "value";
+            var categoria = _DbProduto.Categorias.Where(categoria=>categoria.Id == id).FirstOrDefault();
+            
+            if (categoria is null) 
+                return NotFound("Categoria não encontrada");
+
+            var result = categoria.Map();
+            
+            return Ok(result);
         }
 
-        // POST api/<CategoriaController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] CategoriaRequest request)
         {
+            if(!ModelState.IsValid)
+                return BadRequest("Categoria não e valida");
+
+            Categoria categoria = request.Map();
+            _DbProduto.Categorias.Add(categoria);
+            _DbProduto.SaveChanges();
+
+            return Created(uri: string.Empty, new { id = categoria.Id.ToString() });
         }
 
-        // PUT api/<CategoriaController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id:guid}")]
+        public IActionResult Editar([FromRoute]Guid id, [FromBody] CategoriaRequest request)
         {
+            var categoria = _DbProduto.Categorias.Where(categoria => categoria.Id == id).FirstOrDefault();
+
+            if (categoria is null)
+                return NotFound("Categoria não encomtrada");
+
+            categoria.Descricao = request.Descricao;
+            categoria.Ativo = request.Ativo;
+
+            _DbProduto.SaveChanges();
+
+            return NoContent();
+
         }
 
-        // DELETE api/<CategoriaController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{id:guid}")]
+        public IActionResult Delete(Guid id)
         {
+            var categoria = _DbProduto.Categorias.Where(categoria => categoria.Id == id).FirstOrDefault();
+            if (categoria is null)
+                return NotFound("categoria não encontrada ");
+
+            _DbProduto.Categorias.Remove(categoria);
+            _DbProduto.SaveChanges();
+
+
+            return NoContent();
         }
     }
 }

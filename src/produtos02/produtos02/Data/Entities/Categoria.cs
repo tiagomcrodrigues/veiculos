@@ -1,4 +1,6 @@
-﻿namespace produtos02.Data.Entities
+﻿using produtos02.Models.Responce;
+
+namespace produtos02.Data.Entities
 {
     public class Categoria
     {
@@ -16,5 +18,7 @@
         public string? Descricao { get; set; }
         public bool Ativo { get; set; }
 
+        public virtual ICollection<Produto> Produtos { get; set; }
+        
     }
 }

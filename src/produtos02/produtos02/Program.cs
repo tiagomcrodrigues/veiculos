@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using produtos02.Data.Entities;
+
 namespace produtos02
 {
     public class Program
@@ -8,10 +11,17 @@ namespace produtos02
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            
+            builder.Services.AddControllers()
+              .ConfigureApiBehaviorOptions(options =>
+              {
+                  options.SuppressModelStateInvalidFilter = true;
+              });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<DbProduto>(options =>
+                options.UseSqlServer("Server=192.168.3.1;Database=dbprodutos;User Id=sa;Password=RR.SqlServerDev;"));
 
             var app = builder.Build();
 
@@ -22,7 +32,7 @@ namespace produtos02
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            
 
             app.UseAuthorization();
 

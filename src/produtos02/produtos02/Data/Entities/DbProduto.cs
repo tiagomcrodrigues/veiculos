@@ -18,9 +18,9 @@ namespace produtos02.Data.Entities
             modelBuilder.ApplyConfiguration(new CategoriaConfigurations());
         }
 
-        public DbSet<Produto> produtos { get; set; }
+        public DbSet<Produto> Produtos { get; set; }
 
-        public DbSet<Categoria> categorias { get; set; }
+        public DbSet<Categoria> Categorias { get; set; }
 
 
     }
