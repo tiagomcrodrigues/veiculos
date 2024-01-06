@@ -16,10 +16,12 @@ namespace produtos02.Data.Configurations
                 
             b.Property(b => b.Quantidade)
                 .HasColumnName(nameof(Estoque.Quantidade))
+                .HasColumnType("decimal(16,3)")
                 .IsRequired();
 
             b.Property(b => b.CustoMedio)
                 .HasColumnName(nameof(Estoque.CustoMedio))
+                .HasColumnType("decimal(16,2)")
                 .IsRequired();
 
             b.HasOne(o => o.Produto)

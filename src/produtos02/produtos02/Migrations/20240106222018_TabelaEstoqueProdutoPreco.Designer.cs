@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using produtos02.Data.Entities;
 
@@ -11,9 +12,10 @@ using produtos02.Data.Entities;
 namespace produtos02.Migrations
 {
     [DbContext(typeof(DbProduto))]
-    partial class DbProdutoModelSnapshot : ModelSnapshot
+    [Migration("20240106222018_TabelaEstoqueProdutoPreco")]
+    partial class TabelaEstoqueProdutoPreco
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

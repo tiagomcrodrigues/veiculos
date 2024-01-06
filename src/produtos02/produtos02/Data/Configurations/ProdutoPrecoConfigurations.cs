@@ -19,6 +19,7 @@ namespace produtos02.Data.Configurations
 
             b.Property(b => b.Valor)
                 .HasColumnName(nameof (ProdutoPreco.Valor))
+                .HasColumnType("decimal(16,2)")
                 .IsRequired();
 
             b.HasOne(o => o.Produto)
