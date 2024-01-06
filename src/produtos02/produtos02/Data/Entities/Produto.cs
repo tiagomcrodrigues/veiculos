@@ -21,6 +21,9 @@ namespace produtos02.Data.Entities
         public Guid CategoriaId { get; set; }
         public bool Ativo { get; set; }
 
+
+        public virtual ICollection<ProdutoPreco> ProdutoPreco { get; set; }
+        public virtual Estoque Estoque { get; set; }
         public virtual Categoria Categoria { get; set; }
 
        

@@ -37,7 +37,8 @@ namespace produtos02.Data.Configurations
                 .IsRequired();
 
             b.HasIndex(produto => produto.Nome)
-                .HasDatabaseName($"UK_{nameof(Produto)}_{nameof(Produto.Nome)}")
+                .HasDatabaseName($"UK_{nameof(Produto)}" +
+                $"_{nameof(Produto.Nome)}")
                 .IsUnique();
 
 

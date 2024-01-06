@@ -13,18 +13,18 @@ namespace produtos02.Controllers
     [ApiController]
     public class CategoriaController : ControllerBase
     {
-        private readonly DbProduto _DbProduto;
+        private readonly DbProduto _dbProduto;
 
         public CategoriaController(DbProduto ctx)
         {
-            _DbProduto = ctx;
+            _dbProduto = ctx;
         }
 
 
         [HttpGet]
         public IActionResult Listar([FromQuery] int? ordem = 1)
         {
-            IEnumerable<CategoriaResponse> result = _DbProduto.Categorias
+            IEnumerable<CategoriaResponse> result = _dbProduto.Categorias
                 .Select(categoria => categoria.Map());
 
             if (ordem == 1)
@@ -38,7 +38,7 @@ namespace produtos02.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult ListarID([FromRoute] Guid id)
         {
-            var categoria = _DbProduto.Categorias.Where(categoria => categoria.Id == id).FirstOrDefault();
+            var categoria = _dbProduto.Categorias.Where(categoria => categoria.Id == id).FirstOrDefault();
 
             if (categoria is null)
                 return NotFound("Categoria não encontrada");
@@ -57,8 +57,8 @@ namespace produtos02.Controllers
                     return BadRequest(ModelState.CapturaCriticas());
 
                 Categoria categoria = request.Map();
-                _DbProduto.Categorias.Add(categoria);
-                _DbProduto.SaveChanges();
+                _dbProduto.Categorias.Add(categoria);
+                _dbProduto.SaveChanges();
                 return Created(uri: string.Empty, new { id = categoria.Id.ToString() });
             }
             catch (Exception ex)
@@ -74,7 +74,9 @@ namespace produtos02.Controllers
         [HttpPut("{id:guid}")]
         public IActionResult Editar([FromRoute] Guid id, [FromBody] CategoriaRequest request)
         {
-            var categoria = _DbProduto.Categorias.Where(categoria => categoria.Id == id).FirstOrDefault();
+            var categoria = _dbProduto
+                .Categorias
+                .FirstOrDefault(categoria => categoria.Id == id);
 
             try
             {
@@ -88,7 +90,7 @@ namespace produtos02.Controllers
                 categoria.Descricao = request.Descricao;
                 categoria.Ativo = request.Ativo;
 
-                _DbProduto.SaveChanges();
+                _dbProduto.SaveChanges();
 
                 return NoContent();
             }
@@ -104,7 +106,7 @@ namespace produtos02.Controllers
         [HttpDelete("{id:guid}")]
         public IActionResult Delete(Guid id)
         {
-            var categoria = _DbProduto.Categorias.Where(categoria => categoria.Id == id).FirstOrDefault();
+            var categoria = _dbProduto.Categorias.Where(categoria => categoria.Id == id).FirstOrDefault();
             if (categoria is null)
             {
                 return NotFound("categoria não encontrada ");
@@ -113,8 +115,8 @@ namespace produtos02.Controllers
             {
                 try
                 {
-                    _DbProduto.Categorias.Remove(categoria);
-                    _DbProduto.SaveChanges();
+                    _dbProduto.Categorias.Remove(categoria);
+                    _dbProduto.SaveChanges();
                     return NoContent();
                 }
                 catch (Exception ex)

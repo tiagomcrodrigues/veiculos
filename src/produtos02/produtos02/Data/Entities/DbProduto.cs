@@ -16,12 +16,18 @@ namespace produtos02.Data.Entities
         {
             modelBuilder.ApplyConfiguration(new ProdutoConfigurations());
             modelBuilder.ApplyConfiguration(new CategoriaConfigurations());
+            modelBuilder.ApplyConfiguration(new EstoqueConfigurations());
+            modelBuilder.ApplyConfiguration(new ProdutoPrecoConfigurations());
         }
 
         public DbSet<Produto> Produtos { get; set; }
 
         public DbSet<Categoria> Categorias { get; set; }
 
+        public DbSet<Estoque> Estoques { get; set; }
+
+        public DbSet<ProdutoPreco> ProdutoPrecos { get; set; }
+         
 
     }
 }
