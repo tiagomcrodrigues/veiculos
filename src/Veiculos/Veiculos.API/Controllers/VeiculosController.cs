@@ -49,8 +49,9 @@ namespace Veiculos.API.Controllers
             else
             {
                 /// para buscar outros tipos de campos
-                result = _dbContext.Veiculos.Where(veiculo => 
+                result = _dbContext.Veiculos.Where(veiculo =>
                     veiculo.Fabricante.Nome == fabricante)
+                    .ToList()
                         .Select(s => s.Map());
             }
 
@@ -75,12 +76,12 @@ namespace Veiculos.API.Controllers
             _dbContext.Veiculos.Add(veiculo);
             _dbContext.SaveChanges();
 
-            return Created(uri: string.Empty, new {id=veiculo.Id.ToString()});
+            return Created(uri: string.Empty, new { id = veiculo.Id.ToString() });
 
         }
 
         [HttpPut("{id:guid}")]
-        public IActionResult Editar([FromRoute]Guid id,[FromBody]VeiculoRequest request)
+        public IActionResult Editar([FromRoute] Guid id, [FromBody] VeiculoRequest request)
         {
             ///jeito avancado de buscar ID
             var veiculo = _dbContext.Veiculos.FirstOrDefault(veiculo => veiculo.Id == id);
@@ -122,23 +123,25 @@ namespace Veiculos.API.Controllers
             if (request.AnoModelo.HasValue && request.AnoModelo != veiculo.AnoModelo)
                 veiculo.AnoModelo = request.AnoModelo.Value;
 
-            if (request.AnoFabricacao.HasValue && request.AnoFabricacao != veiculo.AnoFabricacao) { 
-                 veiculo.AnoFabricacao = request.AnoFabricacao.Value; }
+            if (request.AnoFabricacao.HasValue && request.AnoFabricacao != veiculo.AnoFabricacao)
+            {
+                veiculo.AnoFabricacao = request.AnoFabricacao.Value;
+            }
 
-            if (request.Modelo is not null && request.Modelo != veiculo.Modelo)  
-             veiculo.Modelo = request.Modelo; 
+            if (request.Modelo is not null && request.Modelo != veiculo.Modelo)
+                veiculo.Modelo = request.Modelo;
 
-            if (request.FabricanteId is not null && request.FabricanteId != veiculo.FabricanteId) 
-             veiculo.FabricanteId = request.FabricanteId.Value; 
+            if (request.FabricanteId is not null && request.FabricanteId != veiculo.FabricanteId)
+                veiculo.FabricanteId = request.FabricanteId.Value;
 
             if (request.Cor is not null && request.Cor != veiculo.Cor)
-            veiculo.Cor = request.Cor;
+                veiculo.Cor = request.Cor;
 
             if (request.Placa is not null && request.Placa != veiculo.Placa)
-             veiculo.Placa = request.Placa; 
+                veiculo.Placa = request.Placa;
 
-            if (request.Tipo is not null && request.Tipo != veiculo.Tipo) 
-             veiculo.Tipo = request.Tipo;
+            if (request.Tipo is not null && request.Tipo != veiculo.Tipo)
+                veiculo.Tipo = request.Tipo;
 
             _dbContext.SaveChanges();
 
@@ -148,10 +151,10 @@ namespace Veiculos.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
-        public IActionResult Excluir([FromRoute]Guid id)
+        public IActionResult Excluir([FromRoute] Guid id)
         {
             ///jeito basico de buscar ID
-            var veiculo = _dbContext.Veiculos.Where(veiculo => veiculo.Id == id ).FirstOrDefault();
+            var veiculo = _dbContext.Veiculos.Where(veiculo => veiculo.Id == id).FirstOrDefault();
             if (veiculo is null)
                 return NotFound("registro não encotrado");
 

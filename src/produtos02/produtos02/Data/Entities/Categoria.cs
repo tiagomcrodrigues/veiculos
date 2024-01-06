@@ -1,4 +1,4 @@
-﻿using produtos02.Models.Responce;
+﻿using produtos02.Models.Response;
 
 namespace produtos02.Data.Entities
 {

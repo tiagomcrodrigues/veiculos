@@ -1,9 +1,9 @@
-﻿ using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using produtos02.Data.Entities;
 using produtos02.Extensions;
 using produtos02.Models.Request;
-using produtos02.Models.Responce;
+using produtos02.Models.Response;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,25 +14,46 @@ namespace produtos02.Controllers
     public class ProdutoController : ControllerBase
     {
 
-        private readonly DbProduto _DbProduto;
+        private readonly DbProduto _dbProduto;
 
         public ProdutoController(DbProduto ctx)
         {
-            _DbProduto = ctx;
+            _dbProduto = ctx;
         }
 
         [HttpGet]
-        public IActionResult Listar()
+        public IActionResult Listar([FromQuery] string? categoria, [FromQuery] int? ordem = 1)
         {
             IEnumerable<ProdutoResponse> result;
-            result = _DbProduto.Produtos.Select(produto => produto.Map());
+
+            if (string.IsNullOrWhiteSpace(categoria) )
+            {
+                result = _dbProduto
+                    .Produtos
+                    .ToList()
+                    .Select(produto => produto.Map());
+            }
+            else
+            {
+                result = _dbProduto
+                    .Produtos
+                    .Where(produto => produto.Categoria.Descricao == categoria)
+                    .ToList()
+                    .Select(s => s.Map());
+            }
+
+            if (ordem == 1)
+                result = result.OrderBy(produto => produto.Nome);
+            else
+                result = result.OrderByDescending(produto => produto.Nome);
+
             return Ok(result);
         }
 
         [HttpGet("{id:guid}")]
         public IActionResult Get([FromRoute] Guid id)
         {
-            var produto = _DbProduto.Produtos.Where(produto => produto.Id == id).FirstOrDefault();
+            var produto = _dbProduto.Produtos.Where(produto => produto.Id == id).FirstOrDefault();
 
             if (produto is null)
                 return NotFound("Produto não encontrado");
@@ -41,55 +62,84 @@ namespace produtos02.Controllers
 
             return Ok(result);
         }
-        
+
         //TODO : tratar erro quando colocar  mesmo nome e id categoria  errado
 
         [HttpPost]
         public IActionResult Post([FromBody] ProdutoRequest request)
         {
-            if(!ModelState.IsValid)
-                return BadRequest("Produto não e valida");
-           
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState.CapturaCriticas());
 
-            Produto produto = request.Map();
-            _DbProduto.Produtos.Add(produto);
-            _DbProduto.SaveChanges();
+                var categoria = _dbProduto.Categorias.Where(categoria => categoria.Id == request.CategoriaId).FirstOrDefault();
+               
+                if (categoria is null)
+                {
+                    return NotFound("Categoria não encontrado");
+                }
 
-            return Created(uri: string.Empty, new { id = produto.Id.ToString() });
+                Produto produto = request.Map();
+                _dbProduto.Produtos.Add(produto);
+                _dbProduto.SaveChanges();
 
+                return Created(uri: string.Empty, new { id = produto.Id.ToString() });
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException().Message.Contains("UK_Produto_Produto.Nome"))
+                    return BadRequest(new { Chave = "Produto", Valor = "Produto duplicado" });
+                return StatusCode(500, $"Falha na Criação do Produto => {ex.GetBaseException().Message}");
+            }
         }
 
         //TODO : tratar erro quando colocar  mesmo nome e linha 45
 
         [HttpPut("{id:guid}")]
-        public IActionResult Editar([FromRoute]Guid id, [FromBody] ProdutoRequest request)
+        public IActionResult Editar([FromRoute] Guid id, [FromBody] ProdutoRequest request)
         {
-            var produto = _DbProduto.Produtos.Where(produto => produto.Id == id).FirstOrDefault();
+            var produto = _dbProduto.Produtos.Where(produto => produto.Id == id).FirstOrDefault();
+            try
+            {
+                if (produto is null)
+                    return NotFound("Produto não encontrado");
 
-            if (produto is null)
-                return NotFound("Produto não encontrado");
+                var categoria = _dbProduto.Categorias.Where(categoria => categoria.Id == request.CategoriaId).FirstOrDefault();
 
-            produto.Nome = request.nome;
-            produto.Descricao = request.Descricao;
-            produto.CategoriaId = request.CategoriaId;
-            produto.Ativo = request.Ativo;
+                if (categoria is null)
+                {
+                    return NotFound("Categoria não encontrado");
+                }
 
-            _DbProduto.SaveChanges();
+                produto.Nome = request.Nome;
+                produto.Descricao = request.Descricao;
+                produto.CategoriaId = request.CategoriaId;
+                produto.Ativo = request.Ativo;
 
+                _dbProduto.SaveChanges();
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException().Message.Contains("UK_Produto_Produto.Nome"))
+                    return BadRequest(new { Chave = "Produto", Valor = "Produto duplicado" });
+                return StatusCode(500, $"Falha na Edição do Produto => {ex.GetBaseException().Message}");
+            }
+
         }
 
         [HttpDelete("{id:guid}")]
-        public IActionResult Delete([FromRoute]Guid id)
+        public IActionResult Delete([FromRoute] Guid id)
         {
-            var produto = _DbProduto.Produtos.Where(produto => produto.Id == id).FirstOrDefault();
+            var produto = _dbProduto.Produtos.Where(produto => produto.Id == id).FirstOrDefault();
 
             if (produto is null)
                 return NotFound("Produto não encontrado");
 
-            _DbProduto.Produtos.Remove(produto);
-            _DbProduto.SaveChanges();
+            _dbProduto.Produtos.Remove(produto);
+            _dbProduto.SaveChanges();
 
             return NoContent();
         }

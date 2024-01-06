@@ -10,7 +10,7 @@ namespace produtos02.Extensions
         {
             Categoria categoria = new()
             {
-                Descricao = request.Descricao,
+                Descricao = request.Descricao.ToUpper(),
                 Ativo = request.Ativo
             };
             return categoria;
@@ -21,7 +21,7 @@ namespace produtos02.Extensions
             var categoria = new CategoriaResponse()
             {
                 Id = response.Id,
-                Descricao = response.Descricao,
+                Descricao = response.Descricao.ToUpper(),
                 Ativo = response.Ativo
             };
             return categoria;
