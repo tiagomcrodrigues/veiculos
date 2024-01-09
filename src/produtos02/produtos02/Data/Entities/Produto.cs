@@ -22,10 +22,9 @@ namespace produtos02.Data.Entities
         public bool Ativo { get; set; }
 
 
-        public virtual ICollection<ProdutoPreco> ProdutoPreco { get; set; }
+        public virtual ICollection<ProdutoPreco> Precos { get; set; }
         public virtual Estoque Estoque { get; set; }
         public virtual Categoria Categoria { get; set; }
-
-       
+        
     }
 }

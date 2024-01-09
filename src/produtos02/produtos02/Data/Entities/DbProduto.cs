@@ -24,9 +24,9 @@ namespace produtos02.Data.Entities
 
         public DbSet<Categoria> Categorias { get; set; }
 
-        public DbSet<Estoque> Estoques { get; set; }
+        public DbSet<Estoque> Estoque { get; set; }
 
-        public DbSet<ProdutoPreco> ProdutoPrecos { get; set; }
+        public DbSet<ProdutoPreco> Precos { get; set; }
          
 
     }

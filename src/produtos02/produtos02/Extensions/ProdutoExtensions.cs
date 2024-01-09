@@ -19,7 +19,7 @@ namespace produtos02.Extensions
             };
             return produto;
         }
-        
+
         public static ProdutoResponse Map(this Produto entidade)
         {
             var produto = new ProdutoResponse()
@@ -27,6 +27,9 @@ namespace produtos02.Extensions
                 Id = entidade.Id,
                 Nome = entidade.Nome ?? string.Empty,
                 Descricao = (entidade.Descricao ?? string.Empty).ToUpper(),
+                Quantidade = entidade.Estoque?.Quantidade ?? 0,
+                CustoMedio = entidade.Estoque?.CustoMedio ?? 0,
+                preco = entidade.Precos?.OrderByDescending(o => o.DataCadastro).FirstOrDefault()?.Valor ?? 0.00 ,
                 Categoria = new()
                 {
                     Id = entidade.CategoriaId,

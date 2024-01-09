@@ -119,7 +119,7 @@ namespace produtos02.Controllers
                     _dbProduto.SaveChanges();
                     return NoContent();
                 }
-                catch (Exception ex)
+                catch 
                 {
                     return BadRequest(new { Chave = "Categoria", Valor = "Esta em uso não pode ser deletada" });
                 }

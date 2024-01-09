@@ -4,13 +4,12 @@ namespace produtos02.Models.Request
 {
     public class EstoqueRequest
     {
-        [Required(ErrorMessage = "Campo Produto Id é obrigatório")]
-        public Guid ProdutoId { get; set; }
 
-        [Required(ErrorMessage = "A quantrdade é obrigatório")]
-        public decimal Quantidade { get; set; }
+        [Range(0.01, 9999999999999.999, ErrorMessage = $"A quantidade deve ser informada (valores entre 0,01 e 9.999.999.999.999,999)")]
+        public double Quantidade { get; set; }
 
-        public decimal CustoMedio { get; set; }
+        [Range(0.01, 99999999999999.99, ErrorMessage = $"O valor deve ser informado (valores entre 0,01 e 99.999.999.999.999,99)")]
+        public double Valor { get; set; }
 
     }
 }

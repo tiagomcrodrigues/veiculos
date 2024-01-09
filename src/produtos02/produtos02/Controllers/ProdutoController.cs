@@ -130,6 +130,112 @@ namespace produtos02.Controllers
 
         }
 
+        [HttpPost("{ProdutoId:guid}/preco")]
+        public IActionResult PrecoCadastro([FromRoute] Guid produtoId, [FromBody] ProdutoPrecoRequest request)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState.CapturaCriticas()); }
+            try
+            {
+                var produto = _dbProduto.Produtos.Where(produto => produto.Id == produtoId).FirstOrDefault();
+
+                if (produto is null)
+                    return NotFound("Produto não encontrado.");
+
+                ProdutoPreco preco =  new(produtoId,request.Valor);
+                
+                _dbProduto.Precos.Add(preco);
+                _dbProduto.SaveChanges();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Falha na entrada do estoque => {ex.GetBaseException().Message}");
+            }
+
+
+        }
+
+        [HttpPatch("{produtoId:guid}/entrada-estoque")]
+        public IActionResult EntradaEstoque([FromRoute] Guid produtoId, [FromBody] EstoqueRequest request)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState.CapturaCriticas()); }
+            try
+            {
+                var produto = _dbProduto.Produtos.Where(produto => produto.Id == produtoId).FirstOrDefault();
+               
+                if (produto is null)
+                    return NotFound("Produto não encontrado.");
+
+                Estoque estoque = produto.Estoque ?? new Estoque() { ProdutoId = produtoId };
+
+                estoque.CustoMedio =
+                    (
+                        (estoque.Quantidade * estoque.CustoMedio)
+                        + (request.Quantidade * request.Valor)
+                    ) / (estoque.Quantidade + request.Quantidade);
+
+                estoque.Quantidade += request.Quantidade;
+
+                if (produto.Estoque is null)
+                    _dbProduto.Estoque.Add(estoque);
+
+                _dbProduto.SaveChanges();
+
+                return NoContent();
+
+                /*
+                if (produto.Estoque is null)
+                {
+                    Estoque estoque = new()
+                    {
+                        ProdutoId = produtoId,
+                        Quantidade = request.Quantidade,
+                        CustoMedio = request.Valor
+                    };
+
+                    _dbProduto.Estoque.Add(estoque);
+                    _dbProduto.SaveChanges();
+                    
+                    return Created(uri: string.Empty, new { id = produto.Id.ToString() });
+                }
+                else
+                {
+                    decimal cal = (produto.Estoque.Quantidade * produto.Estoque.CustoMedio) + (request.Quantidade * request.Valor);
+                    request.Valor = cal / (produto.Estoque.Quantidade + request.Quantidade);
+
+                    produto.Estoque.Quantidade = request.Quantidade;
+                    produto.Estoque.CustoMedio = request.Valor;
+
+                    _dbProduto.SaveChanges();
+                    return NoContent();
+                }*/
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Falha na entrada do estoque => {ex.GetBaseException().Message}");
+            }
+
+
+        }
+
+        [HttpPatch("{ProdutoId:guid}/saida-estoque")]
+        public IActionResult SaidaEStoque([FromRoute] Guid produtoId, [FromBody] EstoqueRequestSaida request)
+        {
+            var produto = _dbProduto.Produtos.Where(produto => produto.Id == produtoId).FirstOrDefault();
+
+            if (produto is null)
+                return NotFound("Produto não encontrado.");
+
+            Estoque estoque = produto.Estoque ?? new Estoque() { ProdutoId = produtoId };
+
+            estoque.Quantidade -= request.Quantidade;
+
+            _dbProduto.SaveChanges();
+            return NoContent();
+
+        }
+
         [HttpDelete("{id:guid}")]
         public IActionResult Delete([FromRoute] Guid id)
         {

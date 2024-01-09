@@ -3,8 +3,8 @@
     public class Estoque
     { 
         public Guid ProdutoId { get; set; }
-        public decimal Quantidade { get; set;}
-        public decimal CustoMedio { get; set; }
+        public double Quantidade { get; set;}
+        public double CustoMedio { get; set; }
 
         public virtual Produto Produto { get; set; }
     }

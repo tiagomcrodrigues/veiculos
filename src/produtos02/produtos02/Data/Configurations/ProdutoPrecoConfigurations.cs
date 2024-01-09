@@ -23,7 +23,7 @@ namespace produtos02.Data.Configurations
                 .IsRequired();
 
             b.HasOne(o => o.Produto)
-                .WithMany(d => d.ProdutoPreco)
+                .WithMany(d => d.Precos)
                 .HasForeignKey(o => o.ProdutoId)
                 .OnDelete(DeleteBehavior.Cascade);
 

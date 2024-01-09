@@ -5,13 +5,9 @@ namespace produtos02.Models.Request
     public class ProdutoPrecoRequest
     {
 
-        [Required(ErrorMessage = "Campo Produto Id é obrigatório")]
-        public Guid ProdutoId { get; set; }
 
-        public DateOnly DataCadastro { get; set; }
-
-        [Required(ErrorMessage = "Campo valor é obrigatório")]
-        public decimal valor { get; set; }
+        [Range(0.01, 99999999999999.99, ErrorMessage = $"O valor deve ser informado (valores entre 0,01 e 99.999.999.999.999,99)")]
+        public double Valor { get; set; }
 
     }
 }
