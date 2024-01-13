@@ -1,4 +1,7 @@
 
+using Livraria.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+
 namespace Livraria
 {
     public class Program
@@ -13,6 +16,18 @@ namespace Livraria
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+//            builder.Services.AddDbContext<DbLivraria>(options =>
+                //options.UseMySql("Server=192.168.3.1;Database=dbprodutos;User Id=sa;Password=RR.SqlServerDev;"));
+
+            builder.Services.AddDbContext<DbLivraria>(opt =>
+            {
+                opt.UseMySql
+                (
+                    builder.Configuration.GetConnectionString("Db"), 
+                    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("Db"))
+                )
+                .UseLazyLoadingProxies();
+            });
 
             var app = builder.Build();
 
