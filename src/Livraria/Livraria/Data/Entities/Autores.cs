@@ -2,7 +2,8 @@
 {
     public class Autores
     {
-        
+
+        public Autores() { }
 
         public Autores(int id)
         {
