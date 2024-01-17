@@ -2,7 +2,7 @@
 {
     public class Livros
     {
-
+        public Livros() { }
 
         public Livros(int id)
         {
@@ -15,10 +15,9 @@
         public string Descricao { get; set; }
         public int AutorId { get; set; }
         public int Quantidade { get; set; }
-        public int QuantidadeEmprestimo { get; set; }
-        public bool PrmitirEmprestimo { get; set; }
+        public bool PermitirEmprestimo { get; set; }
 
-        public virtual Autores Autores { get; set; }
-        //public virtual ICollection<Emprestimos> Emprestadores { get; set; }
+        //public virtual Autores Autores { get; set; }
+      //  public virtual ICollection<Emprestimos> Emprestadores { get; set; }
     }
 }

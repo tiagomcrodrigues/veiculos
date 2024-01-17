@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Livraria.Migrations
 {
     [DbContext(typeof(DbLivraria))]
-    [Migration("20240113002424_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240117134104_CriacaoInicial")]
+    partial class CriacaoInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

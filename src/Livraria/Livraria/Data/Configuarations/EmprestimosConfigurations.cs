@@ -1,6 +1,6 @@
-﻿namespace Livraria.Data.Configuarations
-{
-    public class EmprestimosConfigurations
-    {
-    }
-}
+﻿//namespace Livraria.Data.Configuarations
+//{
+//    public class EmprestimosConfigurations
+//    {
+//    }
+//}
