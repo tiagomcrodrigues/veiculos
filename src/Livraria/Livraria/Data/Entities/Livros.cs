@@ -17,7 +17,7 @@
         public int Quantidade { get; set; }
         public bool PermitirEmprestimo { get; set; }
 
-        //public virtual Autores Autores { get; set; }
-      //  public virtual ICollection<Emprestimos> Emprestadores { get; set; }
+        public virtual Autores Autor { get; set; }
+        //public virtual ICollection<Emprestimos> Emprestimos { get; set; }
     }
 }

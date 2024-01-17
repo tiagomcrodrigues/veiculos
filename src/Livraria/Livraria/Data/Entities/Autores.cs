@@ -14,6 +14,6 @@
 
         public string Nome{ get; set; }
 
-        //public virtual ICollection<Livros> Livros { get; set; }
+        public virtual ICollection<Livros> Livros { get; set; }
     }
 }

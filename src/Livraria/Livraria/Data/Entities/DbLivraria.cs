@@ -10,10 +10,13 @@ namespace Livraria.Data.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new AutoresConfigurations());
+            modelBuilder.ApplyConfiguration(new LivrosConfigurations());
         }
 
 
         public DbSet<Autores> Autores { get; set; }
+
+        public DbSet<Livros> Livros { get; set; }
 
     }
 }
