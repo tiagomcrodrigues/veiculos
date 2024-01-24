@@ -2,7 +2,7 @@
 
 namespace Livraria.Extensions
 {
-    public static class ToolsExtensions
+    public static class TratamentoErroExtensions
     {
         public static object CapturaCriticas(this ModelStateDictionary modelState)
         {
