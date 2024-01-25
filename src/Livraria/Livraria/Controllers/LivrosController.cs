@@ -2,7 +2,6 @@
 using Livraria.Extensions;
 using Livraria.Models.Request;
 using Livraria.Models.Response;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Livraria.Controllers
@@ -19,19 +18,16 @@ namespace Livraria.Controllers
         }
 
         [HttpGet]
-
         public IActionResult Listar()
-
         {
-
             IEnumerable<LivrosResponse> result = _dbLivraria.Livros
                                 .Select(livros => livros.Map());
 
             return Ok(result);
-
         }
+        
         [HttpPost]
-        public IActionResult criar([FromBody] LivrosRequest request)
+        public IActionResult Criar([FromBody] LivrosRequest request)
         {
             try
             {

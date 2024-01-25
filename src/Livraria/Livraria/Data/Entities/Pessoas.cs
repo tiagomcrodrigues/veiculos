@@ -1,21 +1,27 @@
-﻿//namespace Livraria.Data.Entities
-//{
-//    public class Pessoas
-//    {
+﻿
+using Livraria.Models.Response;
 
-//        public Pessoas(int id)
-//        {
-//            Id = id;
-//        }
+namespace Livraria.Data.Entities
+{
+    public class Pessoas
+    {
+        public Pessoas()
+        {
+        }
 
-//        public int Id { get; set; }
-//        public int Cpf { get; set; }
-//        public string Nome { get; set; }
-//        public int Cep { get; set; }
-//        public string Numero { get; set; }
-//        public string Complemento { get; set; }
-//        public int Telefone { get; set; }
+        public Pessoas(int id)
+        {
+            Id = id;
+        }
 
-//        public virtual Emprestimos Emprestado { get; set; }
-//    }
-//}
+        public int Id { get; set; }
+        public string Cpf { get; set; }
+        public string Nome { get; set; }
+        public string Cep { get; set; }
+        public string Numero { get; set; }
+        public string Complemento { get; set; }
+        public string Telefone { get; set; }
+
+        // public virtual Emprestimos Emprestado { get; set; }
+    }
+}
