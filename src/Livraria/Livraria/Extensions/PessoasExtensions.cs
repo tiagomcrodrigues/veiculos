@@ -6,7 +6,7 @@ namespace Livraria.Extensions
 {
     public static class PessoasExtensions
     {
-       /* public static Pessoas Map(this PessoasRequest Request)
+        public static Pessoas Map(this PessoasRequest Request)
         {
             Pessoas pessoas = new()
             {
@@ -18,7 +18,7 @@ namespace Livraria.Extensions
                 Telefone = Request.Telefone
             };
             return pessoas;
-        }*/
+        }
 
         public static PessoasResponse Map(this Pessoas Response)
         {
@@ -34,7 +34,7 @@ namespace Livraria.Extensions
             };
             return pessoas;
         }
-
+       
 
 
     }

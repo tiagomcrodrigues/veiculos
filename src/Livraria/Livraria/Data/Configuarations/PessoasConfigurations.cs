@@ -23,6 +23,7 @@ namespace Livraria.Data.Configuarations
 
             b.Property(b => b.Cpf)
                 .HasColumnName(nameof (Pessoas.Cpf))
+                .HasMaxLength(11)
                 .IsUnicode(false)
                 .IsRequired();
 

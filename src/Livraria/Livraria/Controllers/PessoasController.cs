@@ -25,7 +25,7 @@ namespace Livraria.Controllers
 
             return Ok(result);
         }
-
+      
         [HttpPost]
         public IActionResult Criar([FromBody] PessoasRequest request)
         {
@@ -34,7 +34,7 @@ namespace Livraria.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState.CapturaCriticas);
 
-               Pessoas pessoas =  new(); //request.Map();
+               Pessoas pessoas =  request.Map();
                 _dbLivraria.Pessoas.Add(pessoas);
                 _dbLivraria.SaveChanges();
                 return Created(uri: string.Empty, new { id = pessoas.Id.ToString() });
@@ -62,38 +62,38 @@ namespace Livraria.Controllers
             return Ok(resut);
         }
 
-        //[HttpPut("{id:int}")]
-        //public IActionResult Editar([FromRoute] int id, [FromBody] PessoasRequest request)
-        //{
-        //    try
-        //    {
-        //        if (!ModelState.IsValid)
-        //            return BadRequest(ModelState.CapturaCriticas);
+        [HttpPut("{id:int}")]
+        public IActionResult Editar([FromRoute] int id, [FromBody] PessoasRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState.CapturaCriticas);
 
-        //        var pessoa = _dbLivraria.Pessoas.Where(pessoa => pessoa.Id == id).FirstOrDefault();
-        //        if (pessoa == null)
-        //            return NotFound("Pessoa não encontrada");
+                var pessoa = _dbLivraria.Pessoas.Where(pessoa => pessoa.Id == id).FirstOrDefault();
+                if (pessoa == null)
+                    return NotFound("Pessoa não encontrada");
 
-        //        pessoa.Nome = request.Nome;
-        //        pessoa.Cpf = request.Cpf;
-        //        pessoa.Cep = request.Cpf;
-        //        pessoa.Numero = request.Numero;
-        //        pessoa.Complemento = request.Complemento;
-        //        pessoa.Telefone = request.Telefone;
+                pessoa.Nome = request.Nome;
+                pessoa.Cpf = request.Cpf;
+                pessoa.Cep = request.Cep;
+                pessoa.Numero = request.Numero;
+                pessoa.Complemento = request.Complemento;
+                pessoa.Telefone = request.Telefone;
 
-        //        _dbLivraria.SaveChanges();
-        //        return NoContent();
-        //    }
-        //    catch (Exception ex)
-        //    {
+                _dbLivraria.SaveChanges();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
 
-        //        if (ex.GetBaseException().Message.Contains("UK_Pessoas_Pessoas.Nome"))
-        //            return BadRequest(new { Chave = "Pessoa", valor = "Pessos Duplicado" });
-        //        return StatusCode(500, $"Falha na criação de pessoa => {ex.GetBaseException().Message}");
-        //    }
+                if (ex.GetBaseException().Message.Contains("UK_Pessoas_Pessoas.Nome"))
+                    return BadRequest(new { Chave = "Pessoa", valor = "Pessos Duplicado" });
+                return StatusCode(500, $"Falha na Edição de pessoa => {ex.GetBaseException().Message}");
+            }
 
 
-        //}
+        }
 
         [HttpDelete("{id:int}")]
         public IActionResult Delete([FromRoute] int id)
