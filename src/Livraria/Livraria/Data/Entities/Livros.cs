@@ -18,6 +18,6 @@
         public bool PermitirEmprestimo { get; set; }
 
         public virtual Autores Autor { get; set; }
-        //public virtual ICollection<Emprestimos> Emprestimos { get; set; }
+        public virtual ICollection<Emprestimos> Emprestimos { get; set; }
     }
 }

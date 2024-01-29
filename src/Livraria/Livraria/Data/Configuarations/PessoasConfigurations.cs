@@ -56,6 +56,10 @@ namespace Livraria.Data.Configuarations
                 .HasDatabaseName($"Uk_{nameof(Pessoas)}_{nameof(Pessoas.Nome)}")
                 .IsUnique();
 
+            b.HasIndex(Pessoas => Pessoas.Cpf)
+                .HasDatabaseName($"Uk_{nameof(Pessoas)}_{nameof(Pessoas.Cpf)}")
+                .IsUnique();
+
         }
     }
 }
