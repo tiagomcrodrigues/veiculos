@@ -26,18 +26,14 @@ namespace Livraria.Data.Configuarations
 
             b.Property(b => b.DataEprestimo)
                 .HasColumnName(nameof(Emprestimos.DataEprestimo))
-                .IsUnicode(false)
                 .IsRequired();
 
             b.Property(b => b.DataVencimeto)
                 .HasColumnName(nameof(Emprestimos.DataVencimeto))
-                .IsUnicode(false)
                 .IsRequired();
 
             b.Property(b => b.DataDevolucao)
-                .HasColumnName(nameof(Emprestimos.DataDevolucao))
-                .IsUnicode(false)
-                .IsRequired();
+                .HasColumnName(nameof(Emprestimos.DataDevolucao));
 
              b.HasOne(o => o.Pessoas)
                 .WithMany(d => d.Emprestimos)
