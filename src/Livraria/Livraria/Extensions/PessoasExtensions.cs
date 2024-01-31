@@ -1,6 +1,9 @@
 ﻿using Livraria.Data.Entities;
 using Livraria.Models.Request;
 using Livraria.Models.Response;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Text.Json;
+using TesteQuebraTudo;
 
 namespace Livraria.Extensions
 {
@@ -20,22 +23,21 @@ namespace Livraria.Extensions
             return pessoas;
         }
 
-        public static PessoasResponse Map(this Pessoas Response)
+        public static PessoasResponse Map(this Pessoas pessoa, CepResponse endereco)
         {
-            var pessoas = new PessoasResponse()
+            
+            endereco.Complemento = pessoa.Complemento.ToUpper();
+            endereco.Numero = pessoa.Numero;
+            var response = new PessoasResponse()
             {
-                Id = Response.Id,
-                Nome = Response.Nome.ToUpper(),
-                Cpf = Response.Cpf,
-                Cep = Response.Cep,
-                Numero = Response.Numero,
-                Complemento = Response.Complemento.ToUpper(),
-                Telefone = Response.Telefone
+                Id = pessoa.Id,
+                Nome = pessoa.Nome.ToUpper(),
+                Cpf = pessoa.Cpf,
+                Endereco = endereco,
+                Telefone = pessoa.Telefone
             };
-            return pessoas;
+            return response;
         }
-       
-
 
     }
 }

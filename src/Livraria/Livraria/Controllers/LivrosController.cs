@@ -69,7 +69,7 @@ namespace Livraria.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    return BadRequest(ModelState.CapturaCriticas);
+                    return BadRequest(ModelState.CapturaCriticas());
 
                 var livro = _dbLivraria.Livros.Where(livro => livro.Id == id).FirstOrDefault();
                 if (livro == null)

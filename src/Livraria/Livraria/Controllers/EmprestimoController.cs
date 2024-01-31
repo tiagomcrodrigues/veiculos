@@ -31,24 +31,36 @@ namespace Livraria.Controllers
         [HttpPost]
         public IActionResult Criar([FromBody] EmprestimoRequest request)
         {
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState.CapturaCriticas);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.CapturaCriticas());
 
-                var pessoa = _dbLivraria.Pessoas.Where(pessoa => pessoa.Id == request.PessoaId).FirstOrDefault();
-                if (pessoa == null)
-                    return NotFound("Pessoa não encontrada");
+            var pessoa = _dbLivraria.Pessoas.Where(pessoa => pessoa.Id == request.PessoaId).FirstOrDefault();
+            if (pessoa == null)
+                return NotFound("Pessoa não encontrada");
 
-                var livro = _dbLivraria.Livros.Where(livro => livro.Id == request.LivroId).FirstOrDefault();
-                if (livro == null)
-                    return NotFound("Livro não encontrado");
+            var livro = _dbLivraria.Livros.Where(livro => livro.Id == request.LivroId).FirstOrDefault();
+            if (livro == null)
+                return NotFound("Livro não encontrado");
 
-                Emprestimos emprestimos = request.Map();
-                _dbLivraria.Emprestimos.Add(emprestimos);
-                _dbLivraria.SaveChanges();
-                return Created(uri: string.Empty, new { id = emprestimos.Id.ToString() });
+            var emprestados = _dbLivraria
+                .Emprestimos
+                .Where(emprestimo => 
+                    emprestimo.LivroId == request.LivroId && 
+                    emprestimo.DataDevolucao == null
+                ).ToList();
 
-            }
+            int Quantidade = (livro.Quantidade - emprestados.Count() );
+
+            if (Quantidade == 1)
+                return UnprocessableEntity(new { Chave = "Emprestimo", Valor = "Livro não possui mais exemplares para emprestimo" });
+
+
+            Emprestimos emprestimos = request.Map();
+            _dbLivraria.Emprestimos.Add(emprestimos);
+            _dbLivraria.SaveChanges();
+            return Created(uri: string.Empty, new { id = emprestimos.Id.ToString() });
+
+        
 
         }
 
@@ -69,24 +81,6 @@ namespace Livraria.Controllers
 
         }
 
-
-        /*
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-        // PUT api/<EmprestimoController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<EmprestimoController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }*/
 
     }
 }

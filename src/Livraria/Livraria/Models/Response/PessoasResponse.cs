@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TesteQuebraTudo;
 
 namespace Livraria.Models.Response
 {
@@ -10,7 +11,8 @@ namespace Livraria.Models.Response
 
         public string Cpf { get; set; }
 
-        public string Cep { get; set; }
+        
+        public CepResponse Endereco { get; set; }
 
         public string Numero { get; set; }
 

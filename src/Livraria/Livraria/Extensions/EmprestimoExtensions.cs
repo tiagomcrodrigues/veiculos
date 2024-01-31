@@ -11,8 +11,8 @@ namespace Livraria.Extensions
             Emprestimos emprestimos = new()
             {
                 PessoaId = request.PessoaId,
-                LivroId = request.LivroId,
-                DataDevolucao = Convert.ToDateTime(null)
+                LivroId = request.LivroId
+                
             };
             return emprestimos;
         }

@@ -2,6 +2,7 @@
 using Livraria.Extensions;
 using Livraria.Models.Request;
 using Livraria.Models.Response;
+using Livraria.Tools;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Livraria.Controllers
@@ -21,7 +22,7 @@ namespace Livraria.Controllers
         public IActionResult Listar()
         {
             IEnumerable<PessoasResponse> result = _dbLivraria.Pessoas
-                                            .Select(pessoas => pessoas.Map());
+                                            .Select(pessoas => pessoas.Map(Ferramentas.BuscaCep(pessoas.Cep).Result));
 
             return Ok(result);
         }
@@ -58,7 +59,7 @@ namespace Livraria.Controllers
             if (pessoa == null)
                 return NotFound("Pessoa não encontrada");
 
-            var resut = pessoa.Map();
+            var resut = pessoa.Map(Ferramentas.BuscaCep(pessoa.Cep).Result);
             return Ok(resut);
         }
 
